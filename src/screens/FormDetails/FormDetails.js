@@ -77,7 +77,7 @@ class FormDetails extends Component {
           </View>
           <Divider style={dividerStyle().dividerStyle} />
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.titleStyle}>Moon Set</Text>
+            <Text style={styles.titleStyle}>Moun Set</Text>
             <Text style={styles.valueStyle}>Yes</Text>
           </View>
           <Divider style={dividerStyle().dividerStyle} />

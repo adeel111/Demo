@@ -16,11 +16,7 @@ import InputField from '../../components/InputField';
 import styles from './styles';
 import {authBG} from '../../assets';
 import theme from '../../theme';
-import {
-  bStyle,
-  btStyle,
-  inputContainerStyle,
-} from '../../utils/commonStyles';
+import {bStyle, btStyle, inputContainerStyle} from '../../utils/commonStyles';
 import {Loading} from '../../components/Loading';
 
 class Form extends Component {
@@ -41,23 +37,24 @@ class Form extends Component {
   };
 
   // handling login logic here...
-  handleLogin = async () => {
-    const {email, password} = this.state;
-    const params = {
-      email: email,
-      password: password,
-    };
-    const validation = this.validateData();
-    if (validation) {
-      alert('Good to go');
-    } else {
-      alert('Not Good to go');
-    }
+  submitForm = async () => {
+    this.props.navigation.navigate('FormList');
+    // const {email, password} = this.state;
+    // const params = {
+    //   email: email,
+    //   password: password,
+    // };
+    // const validation = this.validateData();
+    // if (validation) {
+    //   alert('Good to go');
+    // } else {
+    //   alert('Not Good to go');
+    // }
   };
 
   // perform validation here...
   validateData = () => {
-    const {email, password} = this.state;
+    // const {email, password} = this.state;
     // this.showSnackBar(`Kindly enter valid email.`);
   };
 
@@ -304,7 +301,7 @@ class Form extends Component {
             <TouchableOpacity
               activeOpacity={0.9}
               style={bStyle('45%', 10, 20).buttonContainerStyle}
-              onPress={() => this.handleLogin()}>
+              onPress={() => this.submitForm()}>
               <Text style={btStyle(theme.colors.whiteColor).buttonTextStyle}>
                 Submit
               </Text>
