@@ -44,7 +44,7 @@ export const inputContainerStyle = (width, margin = 10) =>
       margin: margin,
       borderWidth: 1,
       backgroundColor: theme.colors.whiteColor,
-      borderColor: theme.colors.midBlue,
+      borderColor: theme.colors.primaryColor,
     },
   });
 

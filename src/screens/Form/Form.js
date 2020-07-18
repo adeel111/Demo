@@ -6,6 +6,8 @@ import {
   ScrollView,
   SafeAreaView,
   StatusBar,
+  Image,
+  Dimensions,
 } from 'react-native';
 import firebaseService from '../../services/firebase';
 import uuid from 'react-native-uuid';
@@ -14,7 +16,11 @@ import InputField from '../../components/InputField';
 import styles from './styles';
 import theme from '../../theme';
 import {bStyle, btStyle, inputContainerStyle} from '../../utils/commonStyles';
+import {logo} from '../../assets';
 import Loading from '../../components/Loading';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class Form extends Component {
   state = {
@@ -74,14 +80,34 @@ class Form extends Component {
           witnesses: witnesses,
         })
         .then(() => {
+          this.clearForm();
           this.toggleLoading();
-          this.props.navigation.navigate('FormList');
+          alert('Data saved successfully.');
         })
         .catch((error) => {
           this.toggleLoading();
           console.warn('Error => ', error);
         });
     }
+  };
+
+  // clear form
+  clearForm = () => {
+    this.setState({
+      date: '',
+      section: '',
+      township: '',
+      range: '',
+      gridPoint: '',
+      pointEstablished: '',
+      originalEntry: '',
+      originalMonument: '',
+      pointRecovered: '',
+      monumentFound: '',
+      moonSet: '',
+      ties: '',
+      witnesses: '',
+    });
   };
 
   // toggle loading to show or hide progress model...
@@ -132,8 +158,8 @@ class Form extends Component {
   showSnackBar = (text, color = theme.colors.redColor) => {
     Snackbar.show({
       text: text,
-      duration: Snackbar.LENGTH_SHORT,
       backgroundColor: color,
+      duration: Snackbar.LENGTH_SHORT,
     });
   };
 
@@ -151,10 +177,11 @@ class Form extends Component {
           automaticallyAdjustContentInsets={false}
           showsVerticalScrollIndicator={false}>
           <View style={styles.topContainer}>
-            <Text style={styles.titleTextStyle}> Welcome Here </Text>
-            <Text style={styles.simpletextStyle}>
-              Kindly Fill and Submit the form
-            </Text>
+            <Image
+              source={logo}
+              style={{width: SCREEN_WIDTH, height: SCREEN_HEIGHT / 7}}
+              resizeMode="stretch"
+            />
           </View>
 
           <View style={{flex: 0.7, justifyContent: 'center'}}>
@@ -320,7 +347,7 @@ class Form extends Component {
             </View>
 
             <Text style={[styles.headingTextStyle, {marginLeft: 15}]}>
-              Moon Set
+              Moun Set
             </Text>
             <View style={inputContainerStyle('95%').inputViewContainerStyle}>
               <InputField
@@ -380,7 +407,7 @@ class Form extends Component {
                 {
                   borderWidth: 1,
                   backgroundColor: theme.colors.whiteColor,
-                  borderColor: theme.colors.midBlue,
+                  borderColor: theme.colors.primaryColor,
                 },
               ]}>
               <Text style={btStyle(theme.colors.textColor).buttonTextStyle}>

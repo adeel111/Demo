@@ -10,11 +10,7 @@ const styles = StyleSheet.create({
     flex: 0.2,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: theme.colors.midBlue,
-    padding: 10,
     marginBottom: 15,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
   },
   titleTextStyle: {
     fontSize: 22,

@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     fontSize: 20,
-    color: theme.colors.midBlue,
+    color: theme.colors.primaryColor,
     fontFamily: 'sans-serif-medium',
   },
   containerStyle: {

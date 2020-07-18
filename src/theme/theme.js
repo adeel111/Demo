@@ -1,7 +1,7 @@
 const theme = {
   colors: {
-    primaryDarkColor: '#1565C0',
-    primaryColor: '#1976D2',
+    primaryDarkColor: '#1B5E20',
+    primaryColor: '#1B5E20',
     bgColor: '#ECEFF1',
     midBlue: '#1E88E5',
     textColor: '#444444',

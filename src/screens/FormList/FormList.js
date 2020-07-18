@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   FlatList,
+  Picker,
   TouchableOpacity,
 } from 'react-native';
 import {
@@ -24,83 +25,78 @@ import Loading from '../../components/Loading';
 
 class FormList extends Component {
   state = {
-    data: [
-      {
-        section: 'Private',
-        township: 'Sargodha',
-        range: '60 to 70 km',
-        gridPoint: 'Lorem',
-        entry: 'Ipsum',
-        monument: 'Pakistan Monument',
-        date: '16/07/2020',
-      },
-      {
-        section: 'Public',
-        township: 'Sargodha',
-        range: '60 to 70 km',
-        gridPoint: 'Lorem',
-        entry: 'Ipsum',
-        monument: 'Pakistan Monument',
-        date: '16/07/2020',
-      },
-      {
-        section: 'Private',
-        township: 'Sargodha',
-        range: '60 to 70 km',
-        gridPoint: 'Lorem',
-        entry: 'Ipsum',
-        monument: 'Pakistan Monument',
-        date: '16/07/2020',
-      },
-      {
-        section: 'Private',
-        township: 'Sargodha',
-        range: '60 to 70 km',
-        gridPoint: 'Lorem',
-        entry: 'Ipsum',
-        monument: 'Pakistan Monument',
-        date: '16/07/2020',
-      },
-      {
-        section: 'Private',
-        township: 'Sargodha',
-        range: '60 to 70 km',
-        gridPoint: 'Lorem',
-        entry: 'Ipsum',
-        monument: 'Pakistan Monument',
-        date: '16/07/2020',
-      },
-      {
-        section: 'Private',
-        township: 'Sargodha',
-        range: '60 to 70 km',
-        gridPoint: 'Lorem',
-        entry: 'Ipsum',
-        monument: 'Pakistan Monument',
-        date: '16/07/2020',
-      },
-    ],
+    data: [],
     filteredData: null,
     searchQuery: '',
     loading: false,
+    types: [
+      {id: '0', name: 'Select Type'},
+      {id: '1', name: 'Section'},
+      {id: '2', name: 'Township'},
+      {id: '3', name: 'Range'},
+      {id: '4', name: 'Grid Point'},
+    ],
+    selectedType: 'Select Type',
   };
 
   componentDidMount = () => {
-    this.setState({
-      filteredData: this.state.data,
-    });
     this.toggleLoading();
     this.retrieveUserData();
   };
 
   onSearch = (searchQuery) => {
-    const results = this.state.filteredData.filter((obj) =>
-      obj.section.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
     this.setState({
-      data: results,
       searchQuery: searchQuery,
     });
+    const {selectedType, filteredData} = this.state;
+    switch (selectedType) {
+      case 'Select Type':
+        const results0 = filteredData.filter((obj) =>
+          obj.section.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+        this.setState({
+          data: results0,
+          searchQuery: searchQuery,
+        });
+      case 'Section':
+        const results1 = filteredData.filter((obj) =>
+          obj.section.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+        this.setState({
+          data: results1,
+          searchQuery: searchQuery,
+        });
+        break;
+      case 'Township':
+        const results2 = filteredData.filter((obj) =>
+          obj.township.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+        this.setState({
+          data: results2,
+          searchQuery: searchQuery,
+        });
+        break;
+      case 'Range':
+        const results3 = filteredData.filter((obj) =>
+          obj.range.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+        this.setState({
+          data: results3,
+          searchQuery: searchQuery,
+        });
+        break;
+      case 'Grid Point':
+        const results4 = filteredData.filter((obj) =>
+          obj.gridPoint.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+        this.setState({
+          data: results4,
+          searchQuery: searchQuery,
+        });
+        break;
+      default:
+        return;
+    }
   };
 
   // Read From Database
@@ -114,6 +110,7 @@ class FormList extends Component {
         this.setState(
           {
             data: comingArrayData,
+            filteredData: comingArrayData,
             isFetching: false,
           },
           () => {
@@ -132,8 +129,8 @@ class FormList extends Component {
   };
 
   listItemPress = (item) => {
-    this.props.navigation.navigate('FormDetails',{
-      item: item
+    this.props.navigation.navigate('FormDetails', {
+      item: item,
     });
   };
 
@@ -222,14 +219,47 @@ class FormList extends Component {
             inputContainerStyle('90%').inputViewContainerStyle,
             {marginTop: 25},
           ]}>
-          <View style={{flex: 1, flexDirection: 'row'}}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+            }}>
+            <Picker
+              selectedValue={this.state.selectedType}
+              style={{height: 45, flex: 0.15}}
+              mode={'dialog'}
+              onValueChange={(value) => this.setState({selectedType: value})}>
+              {this.state.types &&
+                this.state.types.map((item, index) => {
+                  if (index === 0) {
+                    return (
+                      <Picker.Item
+                        label={item.name}
+                        value={item.name}
+                        key={index}
+                      />
+                    );
+                  }
+                  return (
+                    <Picker.Item
+                      label={item.name}
+                      value={item.name}
+                      key={index}
+                    />
+                  );
+                })}
+            </Picker>
             <TextInput
               placeholderTextColor="#4e4e4e"
               value={this.state.searchQuery}
               autoCorrect={false}
               onChangeText={(text) => this.onSearch(text)}
               placeholder={'Search here'}
-              style={{flex: 0.88, paddingLeft: 10, marginRight: 10}}
+              style={{
+                flex: 0.73,
+                paddingLeft: 10,
+                marginRight: 10,
+              }}
             />
             <FontAwesome
               name={'search'}
