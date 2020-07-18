@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "976101530520",
+    "firebase_url": "https://fir-b58cc.firebaseio.com",
+    "project_id": "fir-b58cc",
+    "storage_bucket": "fir-b58cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976101530520:android:07ee4733f30934950229ed",
+        "android_client_info": {
+          "package_name": "com.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976101530520-nb6peurq37i5bpnmdgrent09hgjdsfoq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHOT8kpPb6tGzW7-BjTh9tdpz-4enVVxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976101530520-nb6peurq37i5bpnmdgrent09hgjdsfoq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

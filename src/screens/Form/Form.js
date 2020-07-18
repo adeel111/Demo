@@ -2,22 +2,19 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  ImageBackground,
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
   StatusBar,
-  AsyncStorage,
 } from 'react-native';
-import {Icon} from 'native-base';
-import {Divider} from 'react-native-elements';
+import firebaseService from '../../services/firebase';
+import uuid from 'react-native-uuid';
 import Snackbar from 'react-native-snackbar';
 import InputField from '../../components/InputField';
 import styles from './styles';
-import {authBG} from '../../assets';
 import theme from '../../theme';
 import {bStyle, btStyle, inputContainerStyle} from '../../utils/commonStyles';
-import {Loading} from '../../components/Loading';
+import Loading from '../../components/Loading';
 
 class Form extends Component {
   state = {
@@ -34,28 +31,101 @@ class Form extends Component {
     moonSet: '',
     ties: '',
     witnesses: '',
+    loading: false,
   };
 
-  // handling login logic here...
-  submitForm = async () => {
-    this.props.navigation.navigate('FormList');
-    // const {email, password} = this.state;
-    // const params = {
-    //   email: email,
-    //   password: password,
-    // };
-    // const validation = this.validateData();
-    // if (validation) {
-    //   alert('Good to go');
-    // } else {
-    //   alert('Not Good to go');
-    // }
+  submitForm = () => {
+    const {
+      date,
+      section,
+      township,
+      range,
+      gridPoint,
+      pointEstablished,
+      originalEntry,
+      originalMonument,
+      pointRecovered,
+      monumentFound,
+      moonSet,
+      ties,
+      witnesses,
+    } = this.state;
+
+    const validation = this.validateData();
+    if (validation) {
+      this.toggleLoading();
+      firebaseService
+        .database()
+        .ref('FormData')
+        .child(uuid.v4())
+        .set({
+          date: date,
+          section: section,
+          township: township,
+          range: range,
+          gridPoint: gridPoint,
+          pointEstablished: pointEstablished,
+          originalEntry: originalEntry,
+          originalMonument: originalMonument,
+          pointRecovered: pointRecovered,
+          monumentFound: monumentFound,
+          moonSet: moonSet,
+          ties: ties,
+          witnesses: witnesses,
+        })
+        .then(() => {
+          this.toggleLoading();
+          this.props.navigation.navigate('FormList');
+        })
+        .catch((error) => {
+          this.toggleLoading();
+          console.warn('Error => ', error);
+        });
+    }
+  };
+
+  // toggle loading to show or hide progress model...
+  toggleLoading = () => {
+    this.setState({loading: !this.state.loading});
   };
 
   // perform validation here...
   validateData = () => {
-    // const {email, password} = this.state;
-    // this.showSnackBar(`Kindly enter valid email.`);
+    const {
+      date,
+      section,
+      township,
+      range,
+      gridPoint,
+      pointEstablished,
+      originalEntry,
+      originalMonument,
+      pointRecovered,
+      monumentFound,
+      moonSet,
+      ties,
+      witnesses,
+    } = this.state;
+    if (
+      date == '' ||
+      section == '' ||
+      township == '' ||
+      range == '' ||
+      gridPoint == '' ||
+      pointEstablished == '' ||
+      originalEntry == '' ||
+      originalMonument == '' ||
+      pointRecovered == '' ||
+      monumentFound == '' ||
+      moonSet == '' ||
+      ties == '' ||
+      witnesses == ''
+    ) {
+      this.showSnackBar(`Kindly Fill all the fields.`);
+      return false;
+    } else {
+      return true;
+    }
   };
 
   // show snackBar...
@@ -67,19 +137,15 @@ class Form extends Component {
     });
   };
 
-  // navigate to asked screen...
-  replaceScreen = async (screen) => {
-    this.props.navigation.navigate(screen);
-  };
-
   render() {
-    return (
+    return this.state.loading === true ? (
+      <Loading text="Saving Data..." />
+    ) : (
       <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.bgColor}}>
         <StatusBar
           backgroundColor={theme.colors.primaryDarkColor}
           hidden={false}
         />
-        <Loading visible={this.props.isLoading} />
         <ScrollView
           contentContainerStyle={{flexGrow: 1}}
           automaticallyAdjustContentInsets={false}
@@ -115,7 +181,7 @@ class Form extends Component {
               <View style={inputContainerStyle('45%').inputViewContainerStyle}>
                 <InputField
                   placeholder=""
-                  inputType="password"
+                  inputType="text"
                   capitalize={'none'}
                   onChangeText={(text) => {
                     this.setState({section: text});

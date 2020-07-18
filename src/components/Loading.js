@@ -1,29 +1,62 @@
-import React from 'react';
-import {ActivityIndicator, StyleSheet} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, StyleSheet, Modal, ActivityIndicator} from 'react-native';
+import {PropTypes} from 'prop-types';
+import theme from '../theme';
 
-export const Loading = ({visible}) => (
-  <ActivityIndicator
-    animating
-    color="red"
-    style={visible ? loader.centering : loader.hideIndicator}
-    size="large"
-  />
-);
-const loader = StyleSheet.create({
-  centering: {
+class Loading extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    const {text} = this.props;
+    return (
+      <Modal visible animationType={'fade'} transparent>
+        <View style={styles.wrapper}>
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator color={theme.colors.primaryColor} size={50} />
+            <Text style={styles.textStyle}>{text}</Text>
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+}
+
+Loading.propTypes = {
+  text: PropTypes.string.isRequired,
+};
+
+const styles = StyleSheet.create({
+  wrapper: {
     flex: 1,
-    position: 'absolute',
-    top: 70,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 10,
-    backgroundColor: 'transparent',
-    opacity: 0.8,
+    zIndex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
-  hideIndicator: {
+  loaderContainer: {
+    width: 150,
+    height: 140,
+    borderRadius: 15,
+    alignSelf: 'center',
     position: 'absolute',
-    top: -100,
-    opacity: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  loaderImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 15,
+  },
+  textStyle: {
+    fontSize: 16,
+    marginTop: 10,
+    fontWeight: '500',
+    color: theme.colors.primaryColor,
   },
 });
+
+export default Loading;

@@ -19,7 +19,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Card, Divider} from 'react-native-elements';
 import theme from '../../theme';
 import styles from './styles';
-import InputField from '../../components/InputField';
+import firebaseService from '../../services/firebase';
+import Loading from '../../components/Loading';
 
 class FormList extends Component {
   state = {
@@ -81,12 +82,15 @@ class FormList extends Component {
     ],
     filteredData: null,
     searchQuery: '',
+    loading: false,
   };
 
   componentDidMount = () => {
     this.setState({
       filteredData: this.state.data,
     });
+    this.toggleLoading();
+    this.retrieveUserData();
   };
 
   onSearch = (searchQuery) => {
@@ -99,8 +103,38 @@ class FormList extends Component {
     });
   };
 
-  listItemPress = () => {
-    this.props.navigation.navigate('FormDetails');
+  // Read From Database
+  retrieveUserData = () => {
+    firebaseService
+      .database()
+      .ref('/FormData')
+      .once('value')
+      .then((snapshot) => {
+        const comingArrayData = Object.values(snapshot.val());
+        this.setState(
+          {
+            data: comingArrayData,
+            isFetching: false,
+          },
+          () => {
+            this.toggleLoading(); // stop
+          },
+        );
+      })
+      .catch((error) => {
+        console.warn('Error => ', error);
+      });
+  };
+
+  // toggle loading to show or hide progress model...
+  toggleLoading = () => {
+    this.setState({loading: !this.state.loading});
+  };
+
+  listItemPress = (item) => {
+    this.props.navigation.navigate('FormDetails',{
+      item: item
+    });
   };
 
   renderItem = ({item}) => {
@@ -149,7 +183,7 @@ class FormList extends Component {
                     marginRight: 15,
                   },
                 ]}
-                onPress={() => this.listItemPress()}>
+                onPress={() => this.listItemPress(item)}>
                 <Text
                   style={[
                     btStyle(theme.colors.whiteColor).buttonTextStyle,
@@ -168,7 +202,9 @@ class FormList extends Component {
   };
 
   render() {
-    return (
+    return this.state.loading ? (
+      <Loading text="Please wait..." />
+    ) : (
       <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.bgColor}}>
         <Header
           left={
